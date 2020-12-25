@@ -10,6 +10,8 @@ import Alert from './components/Layout/Alert'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {loadUser} from './action/auth'
 import setAuthToken from './helper/setAuthToken'
+import Dashboard from './components/dashboard/Dashboard'
+import PrivateRoute from './components/Routing/PrivateRoute'
 //Redux
 import {Provider} from 'react-redux'
 import store from './store'
@@ -35,6 +37,7 @@ const  App = () => {
         <Switch>
         <Route path="/Register" exact component = {Register}/>
         <Route path="/Login" exact component = {Login}/>
+        <PrivateRoute path="/dashboard" exact component = {Dashboard}/>
         </Switch>
 
 
