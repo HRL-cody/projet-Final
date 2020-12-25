@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/heading-has-content */
 import React, { useEffect } from "react";
+import {Link} from "react-router-dom"
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getCurrentProfile } from "../../action/profile";
@@ -9,7 +10,7 @@ import { Fragment } from "react";
 //Try to capitalize 'app' like
 const Dashboard = ({
   getCurrentProfile,
-  auth,
+  auth:{user},
   profile: { profile, loading },
 }) => {
   useEffect(() => {
@@ -17,16 +18,11 @@ const Dashboard = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return loading && profile === null ? (
-    <Loader />
-  ) : (
-    <Fragment>
-      <h1 className="large text-primary"></h1>
-      <p className="lead">
-        {" "}
-        <i className="fas-fa-user">Welcome{user && user.name}</i>{" "}
-      </p>
-    </Fragment>
+  return loading && profile === null ? (<Loader />) : (<Fragment><h1 className="large text-primary"></h1><p className="lead">{" "}<i className="fas fa-user">Welcome {user && user.name}</i>{" "}</p>
+  {profile !== null ? (<Fragment>has</Fragment>) : (<Fragment> <p>You hav no profile, please add some info</p>
+  <Link to='/creat-profile' className='btn btn-primary my-1'>Creat Profile</Link>
+   </Fragment>)}
+  </Fragment>
   );
 };
 
