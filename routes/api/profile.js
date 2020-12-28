@@ -8,7 +8,7 @@ const User = require("../../Models/User");
 const Profile = require("../../Models/Profile");
 
 //@route GET api/me
-//@desc Get current users profiles
+//@desc Get current users profile
 //@ access Public
 
 router.get("/me", auth, async (req, res) => {
@@ -21,7 +21,7 @@ router.get("/me", auth, async (req, res) => {
       return res.status(400).json({ msg: "there is no profile for this user" });
     }
 
-    // res.json(student);
+     res.json(profile);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -29,7 +29,7 @@ router.get("/me", auth, async (req, res) => {
 });
 
 // @route GET api/profile
-// @desc  Create or Update users profiles
+// @desc  Create or Update users profile
 // @ access Private
 
 router.post(
@@ -48,7 +48,7 @@ router.post(
     const { company, website, location, bio, status, skills } = req.body;
 
     const profileFields = {};
-    profileFields.user = req.user.id;
+     profileFields.user = req.user.id;
     if (company) profileFields.compnay = company;
     if (website) profileFields.website = website;
     if (status) profileFields.status = status;
@@ -57,26 +57,30 @@ router.post(
     if (skills) {
       profileFields.skills = skills.split(",").map((skill) => skill.trim());
     }
-    console.log(profileFields.skills);
+     console.log(profileFields);
+    console.log(req.user.id , 'hello')
     try {
       let profile = await Profile.findOne({ user: req.user.id });
-
+     
+      console.log(profile)
       if (profile) {
         //update
-        profile = await Profile.findByIdAndUpdate(
-          { user: req.user.id },
-          { $set: profileFields },
-          { new: true }
+        console.log('Update')
+        profile = await Profile.findOneAndUpdate(
+           {user:req.user.id} ,
+           { $set: profileFields },
+           {new: true}
         );
         return res.json(profile);
       }
+      console.log('CREATE')
       //Create
       profile = new Profile(profileFields);
       profile.save();
       return res.json(profile);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server Error");
+      res.status(500).send(err.message);
     }
   }
 );
