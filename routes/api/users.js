@@ -23,6 +23,7 @@ router.post(
       "Please enter a password with 8 or more characters"
     ).isLength({ min: 8 }),
   ],
+  
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

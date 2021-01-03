@@ -72,7 +72,9 @@ router.post(
            {new: true}
         );
         return res.json(profile);
+       
       }
+      mongoose.set('useFindAndModify', false);
       console.log('CREATE')
       //Create
       profile = new Profile(profileFields);

@@ -9,6 +9,7 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
+  CLEAR_PROFILE,
 } from "./types";
 import setAuthToken from "../utils/setAuthToken";
 
@@ -18,14 +19,12 @@ export const loadUser = () => async (dispatch) => {
     setAuthToken(localStorage.token);
   }
   try {
-    const res = await axios.post("/api/auth");
+    const res = await axios.get("/api/auth");
 
     dispatch({
       type: USER_LOADED,
       payload: res.data,
     });
-
-    dispatch(loadUser());
   } catch (err) {
     dispatch({
       type: AUTH_ERROR,
@@ -79,6 +78,7 @@ export const login = (email, password) => async (dispatch) => {
       type: LOGIN_SUCCESS,
       payload: res.data,
     });
+    dispatch(loadUser());
   } catch (err) {
     const errors = err.response.data.errors;
 
@@ -93,9 +93,8 @@ export const login = (email, password) => async (dispatch) => {
 
 //logout
 export const logout = () => (dispatch) => {
-  dispatch({
-    type: LOGOUT,
-  });
+  dispatch({ type: CLEAR_PROFILE });
+  dispatch({type: LOGOUT});
 };
 
 // // Load User
